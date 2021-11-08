@@ -1,0 +1,29 @@
+name: main
+on: [push]
+env:
+  MELI_SITE: ${{ secrets.MELI_SITE }}
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: "build"
+        run: |
+          npm install
+          npm run build && npm run export
+      - name: "publish"
+        run: |
+          npx -p "@getmeli/cli" meli upload ./out \
+            --url https://meli.billyjacoby.dev \
+            --site "$MELI_SITE" \
+            --token "$MELI_TOKEN" \
+            --release "$GITHUB_SHA"
+        env:
+          MELI_TOKEN: ${{ secrets.MELI_TOKEN }}
+          # Enable PR previews:
+          # uses the default GITHUB_TOKEN set by Github Actions
+          # https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
