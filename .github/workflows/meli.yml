@@ -13,7 +13,7 @@ jobs:
       - name: "build"
         run: |
           npm install
-          npm run build
+          CI=false npm run build
       - name: "publish"
         run: |
           npx -p "@getmeli/cli" meli upload ./build \
@@ -21,7 +21,7 @@ jobs:
             --site "$MELI_SITE" \
             --token "$MELI_TOKEN" \
             --branch main \
-            --release "$GITHUB_SHA" 
+            --release "$GITHUB_SHA"
         env:
           MELI_TOKEN: ${{ secrets.MELI_TOKEN }}
           # Enable PR previews:
