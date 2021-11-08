@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import twitterLogo from "./assets/twitter-logo.svg";
 import "./App.css";
 
@@ -12,7 +12,7 @@ import idl from "./idl.json";
 // Web3 Constants
 
 // References solana runtime
-const { SystemProgram, Keypair } = web3;
+const { SystemProgram } = web3;
 
 const arr = Object.values(kp._keypair.secretKey);
 const secret = new Uint8Array(arr);
@@ -73,7 +73,7 @@ const App = () => {
     }
   }
 
-  async function getGifList() {
+  const getGifList = useCallback(async function getGifList() {
     try {
       const provider = getProvider();
       const program = new Program(idl, programID, provider);
@@ -87,7 +87,7 @@ const App = () => {
       console.log("Error in getGifs: ", error);
       setGifList(null);
     }
-  }
+  });
 
   const checkIfWalletIsConnected = async () => {
     try {
