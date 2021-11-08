@@ -30,7 +30,7 @@ const opts = {
 };
 
 // Constants
-const TWITTER_HANDLE = "_buildspace";
+const TWITTER_HANDLE = "billyjacoby";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
@@ -73,7 +73,7 @@ const App = () => {
     }
   }
 
-  const getGifList = useCallback(async function getGifList() {
+  async function getGifList() {
     try {
       const provider = getProvider();
       const program = new Program(idl, programID, provider);
@@ -87,7 +87,7 @@ const App = () => {
       console.log("Error in getGifs: ", error);
       setGifList(null);
     }
-  });
+  }
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -183,13 +183,15 @@ const App = () => {
             Submit
           </button>
           <div className="gif-grid">
-            {gifList.map((gif) => (
-              <div className="gif-item" key={gif}>
-                <h3 style={{ color: "white" }}>Submitted by:</h3>
-                <p style={{ color: "white" }}>{gif.userAddress.toString()}</p>
-                <img src={gif.gifLink} alt={gif} />
-              </div>
-            ))}
+            {gifList.map((gif) => {
+              return (
+                <div className="gif-item" key={gif.gifLink}>
+                  <h3 style={{ color: "white" }}>Submitted by:</h3>
+                  <p style={{ color: "white" }}>{gif.userAddress.toString()}</p>
+                  <img src={gif.gifLink} alt={gif} />
+                </div>
+              );
+            })}
           </div>
         </div>
       );
@@ -231,7 +233,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a>
+          >{`built by @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
