@@ -20,7 +20,8 @@ jobs:
             --url https://meli.billyjacoby.dev \
             --site "$MELI_SITE" \
             --token "$MELI_TOKEN" \
-            --release "$GITHUB_SHA"
+            --branch main \
+            --release "$GITHUB_SHA" 
         env:
           MELI_TOKEN: ${{ secrets.MELI_TOKEN }}
           # Enable PR previews:
