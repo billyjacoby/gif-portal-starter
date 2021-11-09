@@ -87,6 +87,7 @@ const App = () => {
           try {
             let res = fetch(gif.gifLink);
             let isGif = (await res).headers.get("Content-Type") === "image/gif";
+            console.log(gif);
             if (isGif) gifs.push(gif);
           } catch (error) {
             console.log("unable to fetch gif link: ", gif.gifLink);
@@ -101,6 +102,42 @@ const App = () => {
       console.log("Error in getGifs: ", error);
       setGifList(null);
     }
+  }
+
+  async function sendGif() {
+    //TODO: Add URL verification here
+    if (inputValue.length === 0) {
+      console.log("No gif link given!");
+      return;
+    }
+
+    try {
+      let res = await fetch(inputValue);
+      let isGif = res.headers.get("Content-Type") === "image/gif";
+      if (isGif) {
+        try {
+          const provider = getProvider();
+          const program = new Program(idl, programID, provider);
+
+          await program.rpc.addGif(inputValue, "userName", {
+            accounts: {
+              baseAccount: baseAccount.publicKey,
+            },
+          });
+
+          console.log("GIF successfully sent to program", inputValue);
+
+          await getGifList();
+        } catch (error) {
+          console.log("Error sending GIF:", error);
+        }
+      } else {
+        alert("Please make sure you enter the URL of a GIF!");
+      }
+    } catch (error) {
+      console.log("Error, unable to add gif. Error.name:", error.name);
+    }
+    console.log("Gif link: ", inputValue);
   }
 
   const checkIfWalletIsConnected = async () => {
@@ -137,31 +174,6 @@ const App = () => {
     }
   };
 
-  async function sendGif() {
-    //TODO: Add URL verification here
-    if (inputValue.length === 0) {
-      console.log("No gif link given!");
-      return;
-    }
-    console.log("Gif link: ", inputValue);
-
-    try {
-      const provider = getProvider();
-      const program = new Program(idl, programID, provider);
-
-      await program.rpc.addGif(inputValue, {
-        accounts: {
-          baseAccount: baseAccount.publicKey,
-        },
-      });
-
-      console.log("GIF successfully sent to program", inputValue);
-
-      await getGifList();
-    } catch (error) {
-      console.log("Error sending GIF:", error);
-    }
-  }
   const renderNotConnectedContainer = () => (
     <button
       className="cta-button connect-wallet-button"

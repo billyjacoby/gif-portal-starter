@@ -36,6 +36,10 @@
         {
           "name": "gifLink",
           "type": "string"
+        },
+        {
+          "name": "userName",
+          "type": "string"
         }
       ]
     }
@@ -75,6 +79,10 @@
           {
             "name": "userAddress",
             "type": "publicKey"
+          },
+          {
+            "name": "userName",
+            "type": "string"
           }
         ]
       }
