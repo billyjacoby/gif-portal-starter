@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import twitterLogo from "./assets/twitter-logo.svg";
 import "./App.css";
 
@@ -80,9 +80,23 @@ const App = () => {
       const account = await program.account.baseAccount.fetch(
         baseAccount.publicKey
       );
+      //* Only displays actual gifs!
+      async function filterGifs() {
+        let gifs = [];
+        for (let gif of account.gifList) {
+          try {
+            let res = fetch(gif.gifLink);
+            let isGif = (await res).headers.get("Content-Type") === "image/gif";
+            if (isGif) gifs.push(gif);
+          } catch (error) {
+            console.log("unable to fetch gif link: ", gif.gifLink);
+          }
+        }
 
-      console.log("Got the account: ", account);
-      setGifList(account.gifList);
+        return gifs;
+      }
+      let newGifs = await filterGifs();
+      setGifList(newGifs);
     } catch (error) {
       console.log("Error in getGifs: ", error);
       setGifList(null);
@@ -214,7 +228,6 @@ const App = () => {
       getGifList();
     }
   }, [walletAddress]);
-  console.log(gifList);
   return (
     <div className="App">
       <div className="container">
