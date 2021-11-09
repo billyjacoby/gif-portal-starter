@@ -5,5 +5,5 @@ build
 
 deploy.sh
 
-src/keypair.json
-src/keypairOLD.json
+***keypair.json
+***keypairOLD.json
