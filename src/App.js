@@ -35,7 +35,8 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
   const [walletAddress, setWalletAddress] = useState(null);
-  const [inputValue, setInputValue] = useState("");
+  const [linkValue, setLinkValue] = useState("");
+  const [userNameValue, setUserNameValue] = useState("");
   const [gifList, setGifList] = useState([]);
 
   function getProvider() {
@@ -106,26 +107,26 @@ const App = () => {
 
   async function sendGif() {
     //TODO: Add URL verification here
-    if (inputValue.length === 0) {
+    if (linkValue.length === 0) {
       console.log("No gif link given!");
       return;
     }
 
     try {
-      let res = await fetch(inputValue);
+      let res = await fetch(linkValue);
       let isGif = res.headers.get("Content-Type") === "image/gif";
       if (isGif) {
         try {
           const provider = getProvider();
           const program = new Program(idl, programID, provider);
 
-          await program.rpc.addGif(inputValue, "userName", {
+          await program.rpc.addGif(linkValue, userNameValue, {
             accounts: {
               baseAccount: baseAccount.publicKey,
             },
           });
 
-          console.log("GIF successfully sent to program", inputValue);
+          console.log("GIF successfully sent to program", linkValue);
 
           await getGifList();
         } catch (error) {
@@ -137,7 +138,7 @@ const App = () => {
     } catch (error) {
       console.log("Error, unable to add gif. Error.name:", error.name);
     }
-    console.log("Gif link: ", inputValue);
+    console.log("Gif link: ", linkValue);
   }
 
   const checkIfWalletIsConnected = async () => {
@@ -202,8 +203,16 @@ const App = () => {
           <input
             type="text"
             placeholder="Enter GIF link!"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            value={linkValue}
+            onChange={(e) => setLinkValue((prev) => e.target.value)}
+          />
+          <br />
+          <input
+            type="text"
+            className="user-name"
+            placeholder="Enter an (optional) name!"
+            value={userNameValue}
+            onChange={(e) => setUserNameValue(e.target.value)}
           />
           <button className="cta-button submit-gif-button" onClick={sendGif}>
             Submit
@@ -213,7 +222,10 @@ const App = () => {
               return (
                 <div className="gif-item" key={gif.gifLink}>
                   <h3 style={{ color: "white" }}>Submitted by:</h3>
-                  <p style={{ color: "white" }}>{gif.userAddress.toString()}</p>
+                  <p style={{ color: "white" }}>
+                    {(gif.userName !== "userName" && gif.userName) ||
+                      gif.userAddress.toString()}
+                  </p>
                   <img src={gif.gifLink} alt={gif} />
                 </div>
               );
