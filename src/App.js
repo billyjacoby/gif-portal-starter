@@ -123,6 +123,7 @@ const App = () => {
           await program.rpc.addGif(linkValue, userNameValue, {
             accounts: {
               baseAccount: baseAccount.publicKey,
+              user: provider.wallet.publicKey,
             },
           });
 

@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "name": "myepicproject",
+  "name": "billyjacoby_gif_wall",
   "instructions": [
     {
       "name": "startStuffOff",
@@ -30,6 +30,11 @@
           "name": "baseAccount",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -89,6 +94,6 @@
     }
   ],
   "metadata": {
-    "address": "G8mo8R6nQzw7ToyFKAgDDYWTPWBhb5WjXrxFBf7EFsLV"
+    "address": "LncxPiPXCrxhfoyASy289iBazYah37JT5n6HaUHGmzc"
   }
 }
